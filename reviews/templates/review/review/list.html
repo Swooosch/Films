@@ -1,0 +1,27 @@
+{% extends "review/base.html" %}
+
+{% block title %}My review{% endblock %}
+
+{% load humanize %} 
+
+{% block content %}
+    {% for review in reviews  %}
+        <h2>
+            <a href="{{ review.get_absolute_url }}">
+                {{ review.title }}
+            </a>
+        </h2>
+        <p class="tags">
+            {% for tag in review.tags.all %}
+                <a href="{% url 'review:review_list_by_tag' tag.slug %}" class="tag-pill">{{ tag.name }}</a>
+            {% endfor %}
+        </p>
+        <p class='date'>
+            Published {{ review.created_on|naturalday }} by {{ review.author }}
+        </p>
+        <p>
+            {{ review.body|truncatewords:30|linebreaks }}
+        </p>
+    {% endfor %}
+    {% include "pagination.html" with page=page_obj %}
+{% endblock %}

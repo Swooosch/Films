@@ -1,0 +1,37 @@
+{% extends "review/base.html" %}
+
+{% block title %}{{ review.title }}{% endblock %}
+
+{% load humanize %} 
+
+{% block content %}
+    <h2>{{ review.title }}</h2>
+    <p class="date">
+        Published {{ review.created_on|naturalday }} by {{ review.author }}
+    </p>
+    {{ review.body|linebreaks }}
+    {% with discussions.count as total_discussions %}
+        <h2>
+            {{ total_discussions }} discussion{{ total_discussions|pluralize }}
+    {% endwith %}
+    {% for discussion in discussions %}
+    <div class="discussion">
+      <p class="info">
+        discussion {{ forloop.counter }} by {{ discussion.user }}
+        {{ discussion.created_on|naturaltime }}
+      </p>
+      {{ discussion.body|linebreaks }}
+      {% if discussion.user == user %}
+        <a href="{% url 'review:edit_discussion' discussion.id %}">Edit |</a>
+        <a href="{% url 'review:delete_discussion' discussion.id %}"> Delete</a>
+    {% endif %}
+    </div>
+  {% empty %}
+    <p>There are no discussions yet.</p>
+  {% endfor %}
+  {% if user.is_authenticated %}
+    {% include "review/review/includes/discussion_form.html" %}
+  {% else %}
+    <p>Please log in to leave a discussion.</p>
+  {% endif %}
+{% endblock %}

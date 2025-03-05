@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Add a discussion{% endblock %}
+
+{% block content %}
+  {% if discussion %}
+    <h2>Your discussion has been added.</h2>
+    <p><a href="{{ review.get_absolute_url }}">Back to the review</a></p>
+  {% else %}
+    {% include "blog/post/includes/discussion_form.html" %}
+  {% endif %}
+{% endblock %}

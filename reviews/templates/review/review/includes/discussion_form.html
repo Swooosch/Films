@@ -1,0 +1,7 @@
+<h2>Add a new discussion</h2>
+
+<form action="{% url "review:post_discussion" post.id %}" method="post" id="myStyle">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <p><input type="submit" value="Add discussion"></p>
+</form>
